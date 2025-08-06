@@ -1,5 +1,4 @@
 from flask import Flask, jsonify, request
-from flask_ngrok import run_with_ngrok
 import datetime
 import hashlib
 import json
@@ -65,8 +64,8 @@ class Blockchain:
         previous_block = self.get_previous_block()
         return previous_block['index'] + 1
 
+
 app = Flask(__name__)
-run_with_ngrok(app)  # For running on Colab
 blockchain = Blockchain()
 
 @app.route('/mine_block', methods=['GET'])
@@ -111,5 +110,7 @@ def add_transaction():
     index = blockchain.add_transaction(data['sender'], data['receiver'], data['amount'])
     return jsonify({'message': f'This transaction will be added to Block {index}'}), 201
 
-app.run()
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=True)
 
